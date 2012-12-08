@@ -92,7 +92,8 @@ module Devise
               resource.ldap_before_save if resource.respond_to?(:ldap_before_save)
             resource.setup({:username => resource.username, :email => [resource.username, "@uni-konstanz.de"].join("")})
             resource.save
-            resource.save_person!
+            resource.save_person
+            resource.profile.save
             end
           return resource
           else
