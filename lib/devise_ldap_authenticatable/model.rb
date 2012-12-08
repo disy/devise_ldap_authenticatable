@@ -84,9 +84,8 @@ module Devise
           if (resource.blank? and ::Devise.ldap_create_user)
             opts = {}
             resource = new(opts)
-            resource.email = [resource.username, "@uni-konstanz.de"].join(".")
             
-            resource.setup({})
+            resource.setup({:email => [resource.username, "@uni-konstanz.de"].join(".")})
             resource[auth_key] = auth_key_value
             resource.password = attributes[:password]
           end
