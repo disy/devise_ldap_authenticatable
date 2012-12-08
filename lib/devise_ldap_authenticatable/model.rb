@@ -82,7 +82,8 @@ module Devise
           resource = where(auth_key => auth_key_value).first
 
           if (resource.blank? and ::Devise.ldap_create_user)
-            resource = build_resource({})
+            resource = new
+            resource.setup({})
             resource[auth_key] = auth_key_value
             resource.password = attributes[:password]
           end
@@ -102,13 +103,6 @@ module Devise
           puts "UPDATE_WITH_PASSWORD: #{resource.inspect}"
         end
 
-      end
-
-      # Build a devise resource passing in the session. Useful to move
-      # temporary session data to the newly created user.
-      def build_resource(hash=nil)
-        hash ||= resource_params || {}
-        self.resource = resource_class.new_with_session(hash, session)
       end
     end
   end
