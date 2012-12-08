@@ -82,8 +82,7 @@ module Devise
           resource = where(auth_key => auth_key_value).first
 
           if (resource.blank? and ::Devise.ldap_create_user)
-            resource = new
-            resource.setup({})
+            resource.build
             resource[auth_key] = auth_key_value
             resource.password = attributes[:password]
           end
