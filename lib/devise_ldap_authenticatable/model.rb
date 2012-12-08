@@ -27,7 +27,7 @@ module Devise
 
         Devise::LdapAdapter.update_own_password(login_with, @password, current_password)
       end
-      
+
       def reset_password!(new_password, new_password_confirmation)
         if new_password == new_password_confirmation && ::Devise.ldap_update_password
           Devise::LdapAdapter.update_password(login_with, new_password)
@@ -43,9 +43,9 @@ module Devise
       # Checks if a resource is valid upon authentication.
       def valid_ldap_authentication?(password)
         if Devise::LdapAdapter.valid_credentials?(login_with, password)
-          return true
+        return true
         else
-          return false
+        return false
         end
       end
 
@@ -69,7 +69,6 @@ module Devise
       # def ldap_before_save
       # end
 
-
       module ClassMethods
         # Authenticate a user based on configured attribute keys. Returns the
         # authenticated user if it's valid or nil.
@@ -91,9 +90,9 @@ module Devise
           if resource.try(:valid_ldap_authentication?, attributes[:password])
             if resource.new_record?
               resource.ldap_before_save if resource.respond_to?(:ldap_before_save)
-              resource.save
+            resource.save
             end
-            return resource
+          return resource
           else
             return nil
           end
@@ -103,6 +102,13 @@ module Devise
           puts "UPDATE_WITH_PASSWORD: #{resource.inspect}"
         end
 
+      end
+
+      # Build a devise resource passing in the session. Useful to move
+      # temporary session data to the newly created user.
+      def build_resource(hash=nil)
+        hash ||= resource_params || {}
+        self.resource = resource_class.new_with_session(hash, session)
       end
     end
   end
